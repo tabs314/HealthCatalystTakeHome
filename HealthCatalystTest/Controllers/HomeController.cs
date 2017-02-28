@@ -1,5 +1,7 @@
-﻿using System;
+﻿using HealthCatalystTest.Models;
+using System;
 using System.Collections.Generic;
+using System.Data.Entity.Validation;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -20,11 +22,33 @@ namespace HealthCatalystTest.Controllers
             return View();
         }
 
-        public ActionResult Contact()
+        [HttpPost]
+        public ActionResult Search()
         {
-            ViewBag.Message = "Your contact page.";
+            string[] searchTokens = this.Request.Form["search_criteria"].Split(' ');
+            List<UserInformationModel> userList = new List<UserInformationModel>();
 
-            return View();
+            using(var db = new UserInformationContext())
+            {
+                db.UserInformation.Add(new UserInformationModel { id =0, FirstName = "test", LastName = "address" });
+                db.SaveChanges();
+            
+                foreach (string searchTerm in searchTokens)
+                {
+
+                    var users = from u in db.UserInformation
+                                where u.FirstName == searchTerm || u.LastName == searchTerm
+                                select u;
+
+                    var theList = users.ToList();
+
+                    userList.AddRange(theList);
+                }
+                
+               
+            }
+
+            return Json(userList);
         }
     }
 }
