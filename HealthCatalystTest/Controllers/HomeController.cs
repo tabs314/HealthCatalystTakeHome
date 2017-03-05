@@ -17,38 +17,29 @@ namespace HealthCatalystTest.Controllers
 
         public ActionResult About()
         {
-            ViewBag.Message = "Your application description page.";
-
             return View();
         }
 
-        [HttpPost]
-        public ActionResult Search()
+        [HttpGet]
+        public JsonResult Search()
         {
-            string[] searchTokens = this.Request.Form["search_criteria"].Split(' ');
+            string[] searchTokens = this.Request.QueryString.Get("search_criteria").Split(' ');
             List<UserInformationModel> userList = new List<UserInformationModel>();
 
             using(var db = new UserInformationContext())
             {
-                db.UserInformation.Add(new UserInformationModel { id =0, FirstName = "test", LastName = "address" });
-                db.SaveChanges();
-            
                 foreach (string searchTerm in searchTokens)
                 {
 
                     var users = from u in db.UserInformation
-                                where u.FirstName == searchTerm || u.LastName == searchTerm
+                                where u.FirstName.Contains(searchTerm) || u.LastName.Contains(searchTerm)
                                 select u;
 
-                    var theList = users.ToList();
-
-                    userList.AddRange(theList);
+                    userList.AddRange(users.ToList());
                 }
-                
-               
             }
 
-            return Json(userList);
+            return Json(userList, JsonRequestBehavior.AllowGet);
         }
     }
 }

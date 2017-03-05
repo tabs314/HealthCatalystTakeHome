@@ -35,6 +35,11 @@ textarea {
     max-width: 500px;
 }
 
+.results{
+    border: 2px;
+    padding: 5px;
+}
+
 .fail{
      padding: 15px;
     -webkit-border-radius: 10px;
@@ -42,6 +47,18 @@ textarea {
     border-radius: 10px;
     border: 2px red solid;
     background-color: pink;
+    font-weight: bold;
+    margin: 10px 0 10px 0;
+    max-width: 500px;
+}
+
+.waiting{
+     padding: 15px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    border: 2px red solid;
+    background-color: yellow;
     font-weight: bold;
     margin: 10px 0 10px 0;
     max-width: 500px;
