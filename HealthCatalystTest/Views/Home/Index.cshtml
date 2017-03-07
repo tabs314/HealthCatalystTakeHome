@@ -13,9 +13,8 @@
         <div class="row">
             <input type="hidden" id="page_number" name="page_number" value="0"/>
             <input type="hidden" id="page_size" name="page_size" value="20" /> <!--Hard coded for now-->
-            <label for="first_name_search">First Name: </label><input type="text" id="first_name_search" name="first_name_search" /> <br />
-            <label for="last_name_search">Last Name: </label><input type="text" id="last_name_search" name="last_name_search" /> <br />
-            <label for="inclusive">Strict Match: <input type="checkbox" name="strict_match" /></label><button onclick="setPage(0)">Search</button>
+            <label for="search_criteria">Name(s): </label><input type="text" id="search_criteria" name="search_criteria" /> <br />
+            <label for="inclusive">Exact match (First + Last): <input type="checkbox" name="strict_match" /></label><button onclick="setPage(0)">Search</button>
         </div>
         <div class="row">
             <div id="search-message" class="hidden"></div>
@@ -57,13 +56,18 @@
                 processResults(data);
             })
             .fail(function (response) {
-                $("#search-message").removeClass('hidden').addClass('fail').html('Failed to retrieve data');
+                $("#search-message").removeClass('waiting').addClass('fail').html('Failed to retrieve data');
             })
         })
     });
 
     function setPage(number) {
-        $('#page_number').val($('#page_number').val() + number);
+        if (number == 0) {
+            $('#page_number').val(0);
+        }
+        else {
+            $('#page_number').val($('#page_number').val() + number);
+        }
     }
 
     function processResults(resultData) {
