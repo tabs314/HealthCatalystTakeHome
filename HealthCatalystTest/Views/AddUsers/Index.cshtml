@@ -3,10 +3,12 @@
     ViewBag.Title = "Index";
 }
 
+<div id="user-operations-message" class="hidden"></div>
 <div class="row">
-    <h2>Add User</h2>
+    <h1>Manage Users</h1>
 </div>
 <div class="row">
+    <h2>Random user Fill</h2>
     <div class="random_users">
         <form>
             <label for="generate_number_random">Generate random users</label><input type="number" name="number_random_users"/><button>Generate</button>
@@ -14,11 +16,23 @@
     </div>
 </div>
 
+<br />
 <div class="row">
+    <h2>Create specific user</h2>
     <div class="create_user">
+       <form>
+           <label for="first_name">First Name:<input type="text" name="first_name" id="first_name" /></label><br />
+           <label for="last_name">Last Name:<input type="text" name="last_name" id="last_name" /></label><br />
+           <label for="age">Age:<input type="number" name="age" id="age" /></label><br />
+           <label for="address">Address:<input type="text" name="address" id="address" /></label><br />
+           <label for="interests">Interests:<input type="text" name="interests" id="interests" /></label><br />
+           <button>Submit</button>
+       </form>
     </div>
 </div>
+<br />
 <div class="row">
+    <h2>Remove all users</h2>
     <div class="remove_users">
         <form>
             <button>Remove all Users</button>
@@ -33,18 +47,28 @@
 </div>
 
 <script>
-    
+    $(function () {
+        $('.create_user').on('submit', 'form', function(e){
+            e.preventDefault();
+
+            $.post('/AddUsers/AddUser', $(this).serialize())
+            .done( function(data){})
+            .fail(function (response) {
+                $("#user-operations-message").removeClass('hidden').addClass('fail').html("Failed to create user");
+            });
+        })
+    });
+
     $(function () {
         $('.remove_users').on('submit', 'form', function (e) {
             e.preventDefault();
 
             $.post('/AddUsers/RemoveAll', $(this).serialize())
             .done(function (data) {
-            }
-            .fail(function (response) {
-                $("#search-message").removeClass('hidden').addClass('fail').html(JSON.parse(response));
             })
-            )
+            .fail(function (response) {
+                $("user-operations-message").removeClass('hidden').addClass('fail').html("Failed to remove all users");
+            });
         })
     });
 
@@ -54,11 +78,11 @@
 
             $.post('/AddUsers/Random', $(this).serialize())
             .done(function (data) {
-            }
-            .fail(function (response) {
-                $("#search-message").removeClass('hidden').addClass('fail').html(JSON.parse(response));
             })
-            )
+            .fail(function (response) {
+                $("#user-operations-message").removeClass('hidden').addClass('fail').html("Failed to generate random users");
+            });
+            
         })
-        });
+    });
 </script>

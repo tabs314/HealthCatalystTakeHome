@@ -11,15 +11,23 @@ namespace HealthCatalystTest.Models
         [Key]
         public int id { get; set; }
 
+        [Display(Name = "First Name")]
+        [Required(ErrorMessage = "Please enter the first name")]
         public string FirstName { get; set; }
 
+        [Display(Name = "Last Name")]
+        [Required(ErrorMessage = "Please enter the last name")]
         public string LastName { get; set; }
 
+        [Display(Name = "Address")]
         public string Address { get; set; }
 
+        [Display(Name = "Age")]
+        [Required(ErrorMessage = "Please enter age")]
         public int Age { get; set; }
 
-        public List<string> Interests { get; set; }
+        [Display(Name = "Interests")]
+        public string Interests { get; set; }
 
         public byte[] picture { get; set; }
     }

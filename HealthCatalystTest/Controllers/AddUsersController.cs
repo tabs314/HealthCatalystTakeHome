@@ -16,6 +16,29 @@ namespace HealthCatalystTest.Controllers
         }
 
         [HttpPost]
+        public ActionResult AddUser()
+        {
+
+            UserInformationModel userInformationModel = new UserInformationModel()
+            {
+                FirstName = this.Request.Form["first_name"],
+                LastName = this.Request.Form["last_name"],
+                Age = int.Parse(this.Request.Form["age"]),
+                Address = this.Request.Form["address"],
+                Interests = this.Request.Form["interests"]
+            };
+
+
+            using(var db = new UserInformationContext())
+            {
+                db.UserInformation.Add(userInformationModel);
+                db.SaveChanges();
+            }
+
+            return Json("ok");
+        }
+
+        [HttpPost]
         public ActionResult RemoveAll()
         {
             using (var db = new UserInformationContext())
@@ -46,8 +69,7 @@ namespace HealthCatalystTest.Controllers
                     userInformation.LastName = "testLastName"+i.ToString();
                     userInformation.Address = "testAddress at "+i.ToString();
                     userInformation.Age = i;
-                    userInformation.Interests = new List<string>();
-                    userInformation.Interests.Add("stuff");
+                    userInformation.Interests = "testInterest " + i.ToString();
                     db.UserInformation.Add(userInformation);
                 }
                 db.SaveChanges();

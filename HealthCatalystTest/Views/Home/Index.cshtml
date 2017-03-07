@@ -8,33 +8,36 @@
     <h1>User Search Sample Application</h1>
 </div>
 
-<div class="row">
-    <div class="search-input">
-        <form id="search_input">
-            <label for="seach_input">First Name: </label><input type="text" id="seach_input" name="search_criteria" />
-            <button>Search</button>
-        </form>
-    </div>
-</div>
+<div class="search-input">
+    <form>
+        <div class="row">
+            <input type="hidden" id="page_number" name="page_number" value="0"/>
+            <input type="hidden" id="page_size" name="page_size" value="20" /> <!--Hard coded for now-->
+            <label for="first_name_search">First Name: </label><input type="text" id="first_name_search" name="first_name_search" /> <br />
+            <label for="last_name_search">Last Name: </label><input type="text" id="last_name_search" name="last_name_search" /> <br />
+            <label for="inclusive">Strict Match: <input type="checkbox" name="strict_match" /></label><button onclick="setPage(0)">Search</button>
+        </div>
+        <div class="row">
+            <div id="search-message" class="hidden"></div>
+            <div class="rounded-corner">
+       
+                    <table>
+                        <tr>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Age</th>
+                            <th>Address</th>
+                            <th>Interests</th>
+                            <th>Picture</th>
+                        </tr>
+                        <tbody id="search-data">
 
-<div class="row">
-    <div id="search-message" class="hidden"></div>
-    <div class="results">
-        <table>
-            <tr>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Age</th>
-                <th>Address</th>
-                <th>Interests</th>
-                <th>Picture</th>
-            </tr>
-            <tbody id="search-data">
-
-            </tbody>
-        </table>
-    </div>
-
+                        </tbody>
+                    </table>
+            </div>
+            <button onclick="setPage(-1)">Previous</button>... <button onclick="setPage(1)">Next</button>
+        </div>
+    </form>
 </div>
 
 <script>
@@ -42,25 +45,26 @@
         $('.search-input').on('submit', 'form', function(e){
             e.preventDefault();
 
-            var queryValue = $('#seach_input').val();
-            var queryParam = "search_criteria=" + queryValue;
-
             //Remove previous data (if any)
             $("#search-data").empty();
 
             //Display waiting message
             $("#search-message").removeClass('hidden').addClass('waiting').html('Waiting for results');
 
-            $.get('/Home/Search?'+queryParam)
+            $.get('/Home/Search', $(this).serialize())
             .done(function (data) {
                 $("#search-message").addClass('hidden');
                 processResults(data);
             })
             .fail(function (response) {
-                $("#search-message").removeClass('hidden').addClass('fail').html(JSON.parse(response));
+                $("#search-message").removeClass('hidden').addClass('fail').html('Failed to retrieve data');
             })
         })
     });
+
+    function setPage(number) {
+        $('#page_number').val($('#page_number').val() + number);
+    }
 
     function processResults(resultData) {
         $.each(resultData, function (i, userResult)
@@ -69,9 +73,10 @@
             var userLastName = userResult["LastName"];
             var userAge = userResult["Age"];
             var userAddress = userResult["Address"];
+            var userInterests = userResult["Interests"];
             var userMarkup = "<tr><td>" + userFirstName + "</td><td>" + userLastName 
                 + "</td><td>" + userAge + "</td><td>" + userAddress 
-                + "</td><td>" + "na" + "</td><td>" + "na" + "</td></tr>";
+                + "</td><td>" + userInterests + "</td><td>" + "na" + "</td></tr>";
             $("#search-data").append(userMarkup);
         });
         

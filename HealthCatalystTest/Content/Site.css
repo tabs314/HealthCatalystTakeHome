@@ -35,10 +35,6 @@ textarea {
     max-width: 500px;
 }
 
-.results{
-    border: 2px;
-    padding: 5px;
-}
 
 .fail{
      padding: 15px;
@@ -62,4 +58,37 @@ textarea {
     font-weight: bold;
     margin: 10px 0 10px 0;
     max-width: 500px;
+}
+
+.rounded-corner
+{
+	font-size: 12px;
+	margin: 45px;
+	width: 480px;
+	text-align: left;
+	border-collapse: collapse;
+}
+
+.rounded-corner th
+{
+	padding: 8px;
+	font-weight: normal;
+	font-size: 13px;
+	color: #fff;
+	background: #000;
+}
+
+.rounded-corner td
+{
+	padding: 8px;
+	background: #808080;
+	border-top: 1px solid #fff;
+	color: #ffffff;
+}
+
+
+
+.rounded-corner tbody tr:hover td
+{
+	background: #c8c8c8;
 }

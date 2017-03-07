@@ -159,6 +159,6 @@ C:\Users\Michael Tabet\Source\Repos\HealthCatalystTakeHome\HealthCatalystTest\bi
 C:\Users\Michael Tabet\Source\Repos\HealthCatalystTakeHome\HealthCatalystTest\bin\Microsoft.Owin.Security.Google.xml
 C:\Users\Michael Tabet\Source\Repos\HealthCatalystTakeHome\HealthCatalystTest\bin\Microsoft.Owin.Security.Twitter.xml
 C:\Users\Michael Tabet\Source\Repos\HealthCatalystTakeHome\HealthCatalystTest\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
-C:\Users\Michael Tabet\Source\Repos\HealthCatalystTakeHome\HealthCatalystTest\obj\Debug\HealthCatalystTest.csprojResolveAssemblyReference.cache
 C:\Users\Michael Tabet\Source\Repos\HealthCatalystTakeHome\HealthCatalystTest\obj\Debug\HealthCatalystTest.dll
 C:\Users\Michael Tabet\Source\Repos\HealthCatalystTakeHome\HealthCatalystTest\obj\Debug\HealthCatalystTest.pdb
+C:\Users\Michael Tabet\Source\Repos\HealthCatalystTakeHome\HealthCatalystTest\obj\Debug\HealthCatalystTest.csprojResolveAssemblyReference.cache
