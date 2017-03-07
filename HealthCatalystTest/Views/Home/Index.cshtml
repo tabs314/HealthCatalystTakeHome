@@ -78,9 +78,11 @@
             var userAge = userResult["Age"];
             var userAddress = userResult["Address"];
             var userInterests = userResult["Interests"];
+            var picturePath = userResult["PicturePath"];
+            var pictureHtml = "<img src="+picturePath+">"
             var userMarkup = "<tr><td>" + userFirstName + "</td><td>" + userLastName 
                 + "</td><td>" + userAge + "</td><td>" + userAddress 
-                + "</td><td>" + userInterests + "</td><td>" + "na" + "</td></tr>";
+                + "</td><td>" + userInterests + "</td><td>" + pictureHtml + "</td></tr>";
             $("#search-data").append(userMarkup);
         });
         

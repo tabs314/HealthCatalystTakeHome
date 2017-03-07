@@ -29,6 +29,6 @@ namespace HealthCatalystTest.Models
         [Display(Name = "Interests")]
         public string Interests { get; set; }
 
-        public byte[] picture { get; set; }
+        public string PicturePath { get; set; }
     }
 }

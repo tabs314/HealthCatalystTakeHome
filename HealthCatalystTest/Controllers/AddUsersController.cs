@@ -1,6 +1,7 @@
 ﻿using HealthCatalystTest.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -28,8 +29,19 @@ namespace HealthCatalystTest.Controllers
                 Interests = this.Request.Form["interests"]
             };
 
+            foreach(string file in this.Request.Files)
+            {
+                HttpPostedFileBase hpf = Request.Files[file] as HttpPostedFileBase;
+                if (hpf.ContentLength == 0) continue;
 
-            using(var db = new UserInformationContext())
+                string savedFileName = Path.Combine("~/Pictures/", Path.GetFileName(hpf.FileName));
+                hpf.SaveAs(Server.MapPath(savedFileName));
+
+                userInformationModel.PicturePath = Path.Combine("/Pictures/", Path.GetFileName(hpf.FileName));
+            }
+
+
+            using (var db = new UserInformationContext())
             {
                 db.UserInformation.Add(userInformationModel);
                 db.SaveChanges();
