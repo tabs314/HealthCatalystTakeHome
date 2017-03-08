@@ -64,6 +64,17 @@ namespace HealthCatalystTest.Controllers
                 db.SaveChanges();
             }
 
+            //Let's delete user picture too, for tidiness
+            string pictureDirectory = Server.MapPath("~/Pictures/");
+
+            DirectoryInfo dirInfo = new DirectoryInfo(pictureDirectory);
+
+            foreach (FileInfo file in dirInfo.GetFiles())
+            {
+                file.Delete();
+            }
+
+
             return Json("ok");
         }
 

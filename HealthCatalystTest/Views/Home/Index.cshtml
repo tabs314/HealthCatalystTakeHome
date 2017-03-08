@@ -8,6 +8,11 @@
     <h1>User Search Sample Application</h1>
 </div>
 
+<div id="search-operations-message" class="alert hidden">
+    <span class="closebtn" onclick="$('#search-operations-message').addClass('hidden')">&times;</span>
+    <div id="search-operations-message-text"></div>
+</div>
+
 <div class="search-input">
     <form>
         <div class="row">
@@ -48,15 +53,18 @@
             $("#search-data").empty();
 
             //Display waiting message
-            $("#search-message").removeClass('hidden').addClass('waiting').html('Waiting for results');
+            $("#search-operations-message").removeClass('hidden').addClass('alert-waiting');
+            $("#search-operations-message-text").empty().text("Waiting for results");
+            
 
             $.get('/Home/Search', $(this).serialize())
             .done(function (data) {
-                $("#search-message").addClass('hidden');
+                $("#search-operations-message").addClass('hidden');
                 processResults(data);
             })
             .fail(function (response) {
-                $("#search-message").removeClass('waiting').addClass('fail').html('Failed to retrieve data');
+                $("#search-operations-message").removeClass('waiting').addClass('alert');
+                $("#search-operations-message-text").empty().text("Failed to retrieve results");
             })
         })
     });
@@ -79,7 +87,13 @@
             var userAddress = userResult["Address"];
             var userInterests = userResult["Interests"];
             var picturePath = userResult["PicturePath"];
-            var pictureHtml = "<img src="+picturePath+">"
+            if (picturePath) {
+                var pictureHtml = "<img src=" + picturePath + ">"
+            }
+            else {
+                pictureHtml = "na";
+            }
+
             var userMarkup = "<tr><td>" + userFirstName + "</td><td>" + userLastName 
                 + "</td><td>" + userAge + "</td><td>" + userAddress 
                 + "</td><td>" + userInterests + "</td><td>" + pictureHtml + "</td></tr>";

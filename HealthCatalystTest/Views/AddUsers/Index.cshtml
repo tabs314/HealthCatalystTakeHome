@@ -3,7 +3,10 @@
     ViewBag.Title = "Index";
 }
 
-<div id="user-operations-message" class="hidden"></div>
+<div id="user-operations-message" class="alert hidden">
+    <span class="closebtn" onclick="$('#user-operations-message').addClass('hidden')">&times;</span>
+    <div id="user-operations-message-text"></div>
+</div>
 <div class="row">
     <h1>Manage Users</h1>
 </div>
@@ -41,12 +44,6 @@
     </div>
 </div>
 
-<div class="row">
-    <form>
-
-    </form>
-</div>
-
 <script>
     $(function () {
         $('.create_user').on('submit', 'form', function(e){
@@ -58,12 +55,17 @@
                 url: '/AddUsers/AddUser',
                 type: 'POST',
                 data: formData,
-                async: false,
+                async: true,
                 cache: false,
                 contentType: false,
                 processData: false,
                 success: function (data) {
-                    alert(data);
+                    $("#user-operations-message").removeClass('hidden').addClass('alert-success');
+                    $("#user-operations-message-text").empty().text("User added successfully");
+                },
+                error: function(data){
+                    $("#user-operations-message").removeClass('hidden').addClass('alert');
+                    $("#user-operations-message-text").empty().text("Failed to add user");
                 }
             });
            
@@ -76,9 +78,12 @@
 
             $.post('/AddUsers/RemoveAll', $(this).serialize())
             .done(function (data) {
+                $("#user-operations-message").removeClass('hidden').addClass('alert-success');
+                $("#user-operations-message-text").empty().text("Remove users success");
             })
             .fail(function (response) {
-                $("user-operations-message").removeClass('hidden').addClass('fail').html("Failed to remove all users");
+                $("#user-operations-message").removeClass('hidden').addClass('alert');
+                $("#user-operations-message-text").empty().text("Remove users failed");
             });
         })
     });
@@ -89,9 +94,12 @@
 
             $.post('/AddUsers/Random', $(this).serialize())
             .done(function (data) {
+                $("#user-operations-message").removeClass('hidden').addClass('alert-success');
+                $("#user-operations-message-text").empty().text("Users added");
             })
             .fail(function (response) {
-                $("#user-operations-message").removeClass('hidden').addClass('fail').html("Failed to generate random users");
+                $("#user-operations-message").removeClass('hidden').addClass('alert');
+                $("#user-operations-message-text").empty().text("Failed to add users");
             });
             
         })
