@@ -95,7 +95,13 @@ namespace HealthCatalystTest.Controllers
                         users.ToList().ForEach(u => uniqueUsers[u.id] = u);
                     }
 
-                    userList = uniqueUsers.Values.OrderBy(u => u.LastName).Skip(pageNumber * pageSize).Take(pageSize).ToList();
+                    userList = uniqueUsers.Values.OrderBy(u => u.LastName).ToList();
+
+                    userList = userList.Skip(pageNumber * pageSize).ToList();
+
+                    userList = userList.Take(pageSize).ToList();
+
+                    //userList = uniqueUsers.Values.OrderBy(u => u.LastName).Skip(pageNumber * pageSize).Take(pageSize).ToList();
                 }
                 
             }

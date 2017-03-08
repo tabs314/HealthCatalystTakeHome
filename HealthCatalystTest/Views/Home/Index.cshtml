@@ -74,7 +74,9 @@
             $('#page_number').val(0);
         }
         else {
-            $('#page_number').val($('#page_number').val() + number);
+            var currentNumber = parseInt($('#page_number').val());
+            var newNumber = currentNumber + parseInt(number);
+            $('#page_number').val(newNumber);
         }
     }
 
@@ -88,7 +90,7 @@
             var userInterests = userResult["Interests"];
             var picturePath = userResult["PicturePath"];
             if (picturePath) {
-                var pictureHtml = "<img src=" + picturePath + ">"
+                var pictureHtml = "<img class='user-pictures' src=" + picturePath + ">"
             }
             else {
                 pictureHtml = "na";
