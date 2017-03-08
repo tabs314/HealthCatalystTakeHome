@@ -30,7 +30,7 @@ namespace HealthCatalystTest.Controllers
 
         public ActionResult About()
         {
-            return View();
+            return View("About");
         }
 
         [HttpGet]

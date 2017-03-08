@@ -8,6 +8,6 @@ namespace HealthCatalystTest.Models
 {
     public class UserInformationContext : DbContext
     {
-        public DbSet<UserInformationModel> UserInformation { get; set; }
+        public virtual DbSet<UserInformationModel> UserInformation { get; set; }
     }
 }
