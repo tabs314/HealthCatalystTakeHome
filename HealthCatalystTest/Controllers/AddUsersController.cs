@@ -10,6 +10,19 @@ namespace HealthCatalystTest.Controllers
 {
     public class AddUsersController : Controller
     {
+
+        private UserInformationContext context;
+
+        public AddUsersController()
+        {
+            context = new UserInformationContext();
+        }
+
+        public AddUsersController(UserInformationContext context)
+        {
+            this.context = context;
+        }
+
         // GET: AddUsers
         public ActionResult Index()
         {
@@ -17,7 +30,7 @@ namespace HealthCatalystTest.Controllers
         }
 
         [HttpPost]
-        public ActionResult AddUser()
+        public JsonResult AddUser()
         {
 
             UserInformationModel userInformationModel = new UserInformationModel()
@@ -51,19 +64,17 @@ namespace HealthCatalystTest.Controllers
         }
 
         [HttpPost]
-        public ActionResult RemoveAll()
+        public JsonResult RemoveAll()
         {
-            using (var db = new UserInformationContext())
+            foreach(var id in context.UserInformation.Select(e => e.id))
             {
-               foreach(var id in db.UserInformation.Select(e => e.id))
-                {
-                    var entity = new UserInformationModel() { id = id };
-                    db.UserInformation.Attach(entity);
-                    db.UserInformation.Remove(entity);
-                }
-                db.SaveChanges();
+                var entity = new UserInformationModel() { id = id };
+                context.UserInformation.Attach(entity);
+                context.UserInformation.Remove(entity);
             }
 
+            context.SaveChanges();
+         
             //Let's delete user picture too, for tidiness
             string pictureDirectory = Server.MapPath("~/Pictures/");
 
@@ -79,25 +90,24 @@ namespace HealthCatalystTest.Controllers
         }
 
         [HttpPost]
-        public ActionResult Random() {
+        public JsonResult Random() {
 
             int totalUsers = Int32.Parse(this.Request.Form["number_random_users"]);
 
-            using (var db = new UserInformationContext())
+          
+            for (int i = 0; i < totalUsers; i++)
             {
-                for (int i = 0; i < totalUsers; i++)
-                {
-                    UserInformationModel userInformation = new UserInformationModel();
-                    userInformation.FirstName = "testFirstName"+i.ToString();
-                    userInformation.LastName = "testLastName"+i.ToString();
-                    userInformation.Address = "testAddress at "+i.ToString();
-                    userInformation.Age = i;
-                    userInformation.Interests = "testInterest " + i.ToString();
-                    db.UserInformation.Add(userInformation);
-                }
-                db.SaveChanges();
+                UserInformationModel userInformation = new UserInformationModel();
+                userInformation.FirstName = "testFirstName"+i.ToString();
+                userInformation.LastName = "testLastName"+i.ToString();
+                userInformation.Address = "testAddress at "+i.ToString();
+                userInformation.Age = i;
+                userInformation.Interests = "testInterest " + i.ToString();
+                context.UserInformation.Add(userInformation);
             }
 
+            context.SaveChanges();
+           
             return Json("ok");
         }
     }

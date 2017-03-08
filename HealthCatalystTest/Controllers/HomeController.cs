@@ -10,6 +10,19 @@ namespace HealthCatalystTest.Controllers
 {
     public class HomeController : Controller
     {
+
+        private UserInformationContext context;
+
+        public HomeController()
+        {
+            context = new UserInformationContext();
+        }
+
+        public HomeController(UserInformationContext context)
+        {
+            this.context = context;
+        }
+
         public ActionResult Index()
         {
             return View();
@@ -58,53 +71,51 @@ namespace HealthCatalystTest.Controllers
             }
             List<UserInformationModel> userList = new List<UserInformationModel>();
 
-            using(var db = new UserInformationContext())
+           
+            if (strictSearch)
             {
-                if (strictSearch)
+                if (!String.IsNullOrWhiteSpace(lastName))
                 {
-                    if (!String.IsNullOrWhiteSpace(lastName))
-                    {
-                        var users = (from u in db.UserInformation
-                                     where u.FirstName.Equals(firstName) && u.LastName.Equals(lastName)
-                                     orderby u.LastName
-                                     select u).Skip(pageSize * pageNumber).Take(pageSize);
+                    var users = (from u in context.UserInformation
+                                    where u.FirstName.Equals(firstName) && u.LastName.Equals(lastName)
+                                    orderby u.LastName
+                                    select u).Skip(pageSize * pageNumber).Take(pageSize);
 
-                        userList.AddRange(users.ToList());
-                    }
-                    else
-                    {
-                        //In this case, consider "first name" across first and last name
-                        var users = (from u in db.UserInformation
-                                     where u.FirstName.Equals(firstName) || u.LastName.Equals(firstName)
-                                     orderby u.LastName
-                                     select u).Skip(pageSize * pageNumber).Take(pageSize);
-
-                        userList.AddRange(users.ToList());
-                    }
+                    userList.AddRange(users.ToList());
                 }
                 else
                 {
-                    Dictionary<int, UserInformationModel> uniqueUsers = new Dictionary<int, UserInformationModel>();
+                    //In this case, consider "first name" across first and last name
+                    var users = (from u in context.UserInformation
+                                    where u.FirstName.Equals(firstName) || u.LastName.Equals(firstName)
+                                    orderby u.LastName
+                                    select u).Skip(pageSize * pageNumber).Take(pageSize);
 
-                    foreach(string searchTerm in normalizedSearchCriteria)
-                    {
-                       
-                        var users = (from u in db.UserInformation
-                                     where u.FirstName.ToLower().Contains(searchTerm) || u.LastName.ToLower().Contains(searchTerm)
-                                     select u);
-                        users.ToList().ForEach(u => uniqueUsers[u.id] = u);
-                    }
-
-                    userList = uniqueUsers.Values.OrderBy(u => u.LastName).ToList();
-
-                    userList = userList.Skip(pageNumber * pageSize).ToList();
-
-                    userList = userList.Take(pageSize).ToList();
-
-                    //userList = uniqueUsers.Values.OrderBy(u => u.LastName).Skip(pageNumber * pageSize).Take(pageSize).ToList();
+                    userList.AddRange(users.ToList());
                 }
-                
             }
+            else
+            {
+                Dictionary<int, UserInformationModel> uniqueUsers = new Dictionary<int, UserInformationModel>();
+
+                foreach(string searchTerm in normalizedSearchCriteria)
+                {
+                       
+                    var users = (from u in context.UserInformation
+                                    where u.FirstName.ToLower().Contains(searchTerm) || u.LastName.ToLower().Contains(searchTerm)
+                                    select u);
+                    users.ToList().ForEach(u => uniqueUsers[u.id] = u);
+                }
+
+                userList = uniqueUsers.Values.OrderBy(u => u.LastName).ToList();
+
+                userList = userList.Skip(pageNumber * pageSize).ToList();
+
+                userList = userList.Take(pageSize).ToList();
+
+            }
+                
+            
 
             return Json(userList, JsonRequestBehavior.AllowGet);
         }
